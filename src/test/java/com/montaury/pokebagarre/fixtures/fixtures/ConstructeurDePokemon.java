@@ -1,4 +1,4 @@
-package com.montaury.pokebagarre.fixtures;
+package com.montaury.pokebagarre.fixtures.fixtures;
 
 import com.montaury.pokebagarre.metier.Pokemon;
 import com.montaury.pokebagarre.metier.Stats;
