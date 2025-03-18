@@ -23,14 +23,12 @@ test {
 
 jacoco {
   toolVersion = "0.8.12"
-  reportsDirectory = layout.buildDirectory.dir('jacoco-report/test.xml')
 }
 
 jacocoTestReport {
   dependsOn test
   reports {
-    xml.required = true
-    html.required = true
+    xml.required = true    html.required = true
   }
 }
 
