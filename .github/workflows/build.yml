@@ -24,3 +24,10 @@ jobs:
         run:  chmod +x ./gradlew
       - name: Build & test and compute JaCoCo reports
         run: ./gradlew build #jacocoTestReport
+      - name: Test Report
+        uses: dorny/test-reporter@v2
+        if: success() || failure()
+        with:
+          name: JEST Tests
+          path: reports/jest-*.xml
+          reporter: jest-junit
