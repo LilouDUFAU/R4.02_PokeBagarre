@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 18
@@ -31,6 +32,8 @@ jobs:
           name: JEST Tests
           path: reports/jest-*.xml
           reporter: jest-junit
+      - name: Check PowerShell Installation
+        run: pwsh -v
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v5.0
