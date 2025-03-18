@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<testsuites>
+    <testsuite name="PokemonTest">
+        <testcase name="pokemon1_devrait_gagner_car_il_a_une_attaque_plus_haute">
+            <given>
+                <pokemon name="pkmn1" attaque="10" defense="10" />
+                <pokemon name="pkmn2" attaque="5" defense="10" />
+            </given>
+            <when>
+                <action>estVainqueurContre</action>
+            </when>
+            <then>
+                <result>true</result>
+            </then>
+        </testcase>
+
+        <testcase name="pokemon2_devrait_gagner_car_il_a_une_attaque_plus_haute">
+            <given>
+                <pokemon name="pkmn1" attaque="10" defense="10" />
+                <pokemon name="pkmn2" attaque="15" defense="10" />
+            </given>
+            <when>
+                <action>estVainqueurContre</action>
+            </when>
+            <then>
+                <result>false</result>
+            </then>
+        </testcase>
+
+        <testcase name="pokemon1_devrait_gagner_car_il_a_une_defense_plus_haute">
+            <given>
+                <pokemon name="pkmn1" attaque="10" defense="15" />
+                <pokemon name="pkmn2" attaque="10" defense="10" />
+            </given>
+            <when>
+                <action>estVainqueurContre</action>
+            </when>
+            <then>
+                <result>true</result>
+            </then>
+        </testcase>
+
+        <testcase name="pokemon2_devrait_gagner_car_il_a_une_defense_plus_haute">
+            <given>
+                <pokemon name="pkmn1" attaque="10" defense="10" />
+                <pokemon name="pkmn2" attaque="10" defense="15" />
+            </given>
+            <when>
+                <action>estVainqueurContre</action>
+            </when>
+            <then>
+                <result>false</result>
+            </then>
+        </testcase>
+
+        <testcase name="pokemon1_devrait_gagner_car_il_est_le_premier">
+            <given>
+                <pokemon name="pkmn1" attaque="10" defense="10" />
+                <pokemon name="pkmn2" attaque="10" defense="10" />
+            </given>
+            <when>
+                <action>estVainqueurContre</action>
+            </when>
+            <then>
+                <result>true</result>
+            </then>
+        </testcase>
+    </testsuite>
+</testsuites>

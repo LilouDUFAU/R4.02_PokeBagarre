@@ -32,8 +32,6 @@ jobs:
           name: JEST Tests
           path: reports/jest-*.xml
           reporter: jest-junit
-      - name: Check PowerShell Installation
-        run: pwsh -v
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v5.0
