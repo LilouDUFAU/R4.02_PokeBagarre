@@ -28,7 +28,8 @@ jacoco {
 jacocoTestReport {
   dependsOn test
   reports {
-    xml.required = true    html.required = true
+    xml.required = true
+    html.required = true
   }
 }
 
@@ -56,4 +57,6 @@ java {
   }
 }
 
-mainClassName = 'com.montaury.pokebagarre.Main'
+application {
+  mainClass = 'com.montaury.pokebagarre.Main'
+}
