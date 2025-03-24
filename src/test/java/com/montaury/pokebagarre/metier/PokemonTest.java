@@ -19,10 +19,8 @@
 
  */
 
-package com.montaury.pokebagarre.fixtures.metier;
+package com.montaury.pokebagarre.metier;
 
-import com.montaury.pokebagarre.metier.Pokemon;
-import com.montaury.pokebagarre.metier.Stats;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
