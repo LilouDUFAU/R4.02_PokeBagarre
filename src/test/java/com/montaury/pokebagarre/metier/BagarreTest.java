@@ -14,13 +14,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class BagarreTest {
+    //Nom du premier pokemon vide → validerNomPokemons
+    //Nom du second pokemon vide → validerNomPokemons
+    //Nom du premier pokemon null → validerNomPokemons
+    //Nom du second pokemon null → validerNomPokemons
     //Echec de recuperation du premier pokemon → recupererParNom
     //Pokemon 1 a une meilleure attaque et gagne → estVainqueurContre
     //Echec de recuperation du second pokemon → recupererParNom
     //Pokemon 1 a une meilleure attaque et gagne → estVainqueurContre
 
+
+    //nomFonction → void should-then-when-given() {}
     @Test
-    void demarrer_erreur_quand_pkm1_nom_vide() {
+    void devrait_demarrer_erreur_quand_pkm1_nom_vide() {
         // given
         Pokemon pkmn1 = new Pokemon("", "/", new Stats(10, 10));
         // when
@@ -43,7 +49,7 @@ class BagarreTest {
 
 
     @Test
-    void demarrer_erreur_quand_pkm2_nom_vide() {
+    void devrait_demarrer_erreur_quand_pkm2_nom_vide() {
         // given
         Pokemon pkmn2 = new Pokemon("", "/", new Stats(10, 10));
         // when
@@ -66,7 +72,7 @@ class BagarreTest {
 
 
     @Test
-    void demarrer_erreur_quand_pkm1_nom_null() {
+    void devrait_demarrer_erreur_quand_pkm1_nom_null() {
         // given
         Pokemon pkmn1 = new Pokemon(null, "/", new Stats(10, 10));
         // when
@@ -89,7 +95,7 @@ class BagarreTest {
 
 
     @Test
-    void demarrer_erreur_quand_pkm2_nom_null() {
+    void devrait_demarrer_erreur_quand_pkm2_nom_null() {
         // given
         Pokemon pkmn2 = new Pokemon(null, "/", new Stats(10, 10));
         // when
@@ -112,7 +118,7 @@ class BagarreTest {
 
 
     @Test
-    void demarrer_erreur_quand_pkm1_pkm2_meme_nom() {
+    void devrait_demarrer_erreur_quand_pkm1_pkm2_meme_nom() {
         // given
         Pokemon pkmn1 = new Pokemon("Pikachu", "/", new Stats(10, 10));
         Pokemon pkmn2 = new Pokemon("Pikachu", "/", new Stats(10, 10));
@@ -135,7 +141,7 @@ class BagarreTest {
 
 
     @Test
-    void demarrer_erreur_quand_pkm1_non_trouve() {
+    void devrait_demarrer_erreur_quand_pkm1_non_trouve() {
         // given
 
         //when
@@ -144,27 +150,18 @@ class BagarreTest {
     }
 
     @Test
-    void demarrer_erreur_quand_pkm2_non_trouve() {
+    void devrait_demarrer_erreur_quand_pkm2_non_trouve() {
         // given
-        var fausseApi = Mockito.mock(PokeBuildApi.class);
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url1", new Stats(1, 2))));
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.failedFuture(new ErreurRecuperationPokemon("pikachu")));
-        // when
 
+        // when
 
         // then
     }
 
     @Test
-    void demarrer_renvoie_pkm1_quand_pkm1_ok_gagne_pkm2_ok() {
+    void devrait_demarrer_renvoie_pkm1_quand_pkm1_ok_gagne_pkm2_ok() {
         // given
-        var fausseApi = Mockito.mock(PokeBuildApi.class);
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url1", new Stats(1, 2))));
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.failedFuture(new ErreurRecuperationPokemon("pikachu")));
+
         // when
 
         //then
@@ -172,13 +169,9 @@ class BagarreTest {
     }
 
     @Test
-    void demarrer_renvoie_pkm1_quand_pkm1_ok_perd_pkm2_ok() {
+    void devrait_demarrer_renvoie_pkm1_quand_pkm1_ok_perd_pkm2_ok() {
         // given
-        var fausseApi = Mockito.mock(PokeBuildApi.class);
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url1", new Stats(1, 2))));
-        Mockito.when(fausseApi.recupererParNom("pikachu"))
-                .thenReturn(CompletableFuture.failedFuture(new ErreurRecuperationPokemon("pikachu")));
+
         // when
 
         //then
