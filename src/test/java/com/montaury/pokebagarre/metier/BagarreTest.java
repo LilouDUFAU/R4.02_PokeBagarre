@@ -1,180 +1,148 @@
 package com.montaury.pokebagarre.metier;
+
+import com.montaury.pokebagarre.erreurs.ErreurPokemonNonRenseigne;
 import com.montaury.pokebagarre.erreurs.ErreurRecuperationPokemon;
 import com.montaury.pokebagarre.webapi.PokeBuildApi;
-import org.junit.jupiter.api.AfterEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.mock.*;
 
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class BagarreTest {
-    //Nom du premier pokemon vide → validerNomPokemons
-    //Nom du second pokemon vide → validerNomPokemons
-    //Nom du premier pokemon null → validerNomPokemons
-    //Nom du second pokemon null → validerNomPokemons
-    //Echec de recuperation du premier pokemon → recupererParNom
-    //Pokemon 1 a une meilleure attaque et gagne → estVainqueurContre
-    //Echec de recuperation du second pokemon → recupererParNom
-    //Pokemon 1 a une meilleure attaque et gagne → estVainqueurContre
+    private PokeBuildApi fausseApi;
+    private Bagarre bagarre;
 
-
-    //nomFonction → void should-then-when-given() {}
+    @BeforeEach
+    void preparer() {
+        fausseApi = Mockito.mock(PokeBuildApi.class);
+        bagarre = new Bagarre(fausseApi);
+    }
     @Test
-    void devrait_demarrer_erreur_quand_pkm1_nom_vide() {
-        // given
-        Pokemon pkmn1 = new Pokemon("", "/", new Stats(10, 10));
-        // when
-        Throwable thrown = catchThrowable(() -> nomVide1(pkmn1));
-        // then
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Le nom du Pokémon ne peut pas être vide");
-    }
-    public void nomVide1(Pokemon pkmn1) {
-        if (pkmn1.getNom().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du Pokémon ne peut pas être vide");
-        } else {
-            System.out.println("Le combat commence !");
-            Pokemon pkmn2 = new Pokemon("Pikachu", "/", new Stats(50, 10));
-            Bagarre combat = new Bagarre();
-            combat.demarrer(pkmn1.getNom(),pkmn2.getNom());
-        }
-    }
+    void devrait_lever_une_erreur_si_le_premier_pokemon_est_null() {
+        // GIVEN
+        Throwable erreur = Assertions.catchThrowable(()->bagarre.demarrer(null, "scarabrute"));
 
-
-    @Test
-    void devrait_demarrer_erreur_quand_pkm2_nom_vide() {
-        // given
-        Pokemon pkmn2 = new Pokemon("", "/", new Stats(10, 10));
-        // when
-        Throwable thrown = catchThrowable(() -> nomVide2(pkmn2));
-        // then
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Le nom du Pokémon ne peut pas être vide");
-    }
-    public void nomVide2(Pokemon pkmn2) {
-        if (pkmn2.getNom().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du Pokémon ne peut pas être vide");
-        } else {
-            System.out.println("Le combat commence !");
-            Pokemon pkmn1 = new Pokemon("Pikachu", "/", new Stats(50, 10));
-            Bagarre combat = new Bagarre();
-            combat.demarrer(pkmn1.getNom(),pkmn2.getNom());
-        }
-    }
-
-
-    @Test
-    void devrait_demarrer_erreur_quand_pkm1_nom_null() {
-        // given
-        Pokemon pkmn1 = new Pokemon(null, "/", new Stats(10, 10));
-        // when
-        Throwable thrown = catchThrowable(() -> nomNull1(pkmn1));
-        // then
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Le nom du Pokémon ne peut pas être null");
-    }
-    public void nomNull1(Pokemon pkmn1) {
-        if (pkmn1.getNom() == null) {
-            throw new IllegalArgumentException("Le nom du Pokémon ne peut pas être null");
-        } else {
-            System.out.println("Le combat commence !");
-            Pokemon pkmn2 = new Pokemon("Pikachu", "/", new Stats(50, 10));
-            Bagarre combat = new Bagarre();
-            combat.demarrer(pkmn1.getNom(), pkmn2.getNom());
-        }
-    }
-
-
-    @Test
-    void devrait_demarrer_erreur_quand_pkm2_nom_null() {
-        // given
-        Pokemon pkmn2 = new Pokemon(null, "/", new Stats(10, 10));
-        // when
-        Throwable thrown = catchThrowable(() -> nomNull2(pkmn2));
-        // then
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Le nom du Pokémon ne peut pas être null");
-    }
-    public void nomNull2(Pokemon pkmn2) {
-        if (pkmn2.getNom() == null) {
-            throw new IllegalArgumentException("Le nom du Pokémon ne peut pas être null");
-        } else {
-            System.out.println("Le combat commence !");
-            Pokemon pkmn1 = new Pokemon("Pikachu", "/", new Stats(50, 10));
-            Bagarre combat = new Bagarre();
-            combat.demarrer(pkmn1.getNom(), pkmn2.getNom());
-        }
-    }
-
-
-    @Test
-    void devrait_demarrer_erreur_quand_pkm1_pkm2_meme_nom() {
-        // given
-        Pokemon pkmn1 = new Pokemon("Pikachu", "/", new Stats(10, 10));
-        Pokemon pkmn2 = new Pokemon("Pikachu", "/", new Stats(10, 10));
-        // when
-        Throwable thrown = catchThrowable(() -> memePkmn(pkmn1,pkmn2));
-        // then
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Les pokemons doivent etre differents");
-    }
-    public void memePkmn(Pokemon pkmn1,Pokemon pkmn2) {
-        if (pkmn1.getNom().equals(pkmn2.getNom())) {
-            throw new IllegalArgumentException("Les pokemons doivent etre differents");
-        } else {
-            System.out.println("Le combat commence !");
-            Bagarre combat = new Bagarre();
-            combat.demarrer(pkmn1.getNom(), pkmn2.getNom());
-        }
-    }
-
-
-    @Test
-    void devrait_demarrer_erreur_quand_pkm1_non_trouve() {
-        // given
-
-        //when
-
-        //then
+        // THEN
+        assertThat(erreur).isInstanceOf(ErreurPokemonNonRenseigne.class)
+                .hasMessage("Le premier pokemon n'est pas renseigne");
     }
 
     @Test
-    void devrait_demarrer_erreur_quand_pkm2_non_trouve() {
-        // given
+    void devrait_lever_une_erreur_si_le_premier_pokemon_est_vide() {
+        // GIVEN
+        Throwable erreur = Assertions.catchThrowable(()->bagarre.demarrer("", "scarabrute"));
 
-        // when
-
-        // then
+        // THEN
+        assertThat(erreur).isInstanceOf(ErreurPokemonNonRenseigne.class)
+                .hasMessage("Le premier pokemon n'est pas renseigne");
     }
 
     @Test
-    void devrait_demarrer_renvoie_pkm1_quand_pkm1_ok_gagne_pkm2_ok() {
-        // given
+    void devrait_lever_une_erreur_si_le_second_pokemon_est_null() {
+        // GIVEN
+        Throwable erreur = Assertions.catchThrowable(()->bagarre.demarrer("pikachu", null));
 
-        // when
-
-        //then
-
+        // THEN
+        assertThat(erreur).isInstanceOf(ErreurPokemonNonRenseigne.class)
+                .hasMessage("Le second pokemon n'est pas renseigne");
     }
 
     @Test
-    void devrait_demarrer_renvoie_pkm1_quand_pkm1_ok_perd_pkm2_ok() {
-        // given
+    void devrait_lever_une_erreur_si_le_second_pokemon_est_vide() {
+        // GIVEN
+        Throwable erreur = Assertions.catchThrowable(()->bagarre.demarrer("pikachu", ""));
 
-        // when
+        // THEN
+        assertThat(erreur).isInstanceOf(ErreurPokemonNonRenseigne.class)
+                .hasMessage("Le second pokemon n'est pas renseigne");
+    }
 
-        //then
+    @Test
+    void devrait_echouer_si_erreur_api_avec_premier_pokemon() {
+        // GIVEN
+        Mockito.when(fausseApi.recupererParNom("pikachu"))
+                .thenReturn(CompletableFuture.failedFuture(new ErreurRecuperationPokemon("pikachu")));
+        Mockito.when(fausseApi.recupererParNom("scarabrute"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("scarabrute", "url_scarabrute", new Stats(2,3))));
+        // WHEN
+        CompletableFuture<Pokemon> futurVainqueur = bagarre.demarrer("pikachu", "scarabrute");
 
+        // THEN
+        assertThat(futurVainqueur)
+                .failsWithin(Duration.ofSeconds(2))
+                .withThrowableOfType(ExecutionException.class)
+                .havingCause()
+                .isInstanceOf(ErreurRecuperationPokemon.class)
+                .withMessage("Impossible de recuperer les details sur 'pikachu'");
+    }   @Test
+    void devrait_echouer_si_erreur_api_avec_second_pokemon() {
+        // GIVEN
+        Mockito.when(fausseApi.recupererParNom("pikachu"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url_pikachu", new Stats(1,2))));
+
+        Mockito.when(fausseApi.recupererParNom("scarabrute")).
+                thenReturn(CompletableFuture.failedFuture(new ErreurRecuperationPokemon("scarabrute")));
+        // WHEN
+        CompletableFuture<Pokemon> futurVainqueur = bagarre.demarrer("pikachu", "scarabrute");
+
+        // THEN
+        assertThat(futurVainqueur)
+                .failsWithin(Duration.ofSeconds(2))
+                .withThrowableOfType(ExecutionException.class)
+                .havingCause()
+                .isInstanceOf(ErreurRecuperationPokemon.class)
+                .withMessage("Impossible de recuperer les details sur 'scarabrute'");
+    }
+
+    @Test
+    void devrait_retourner_le_premier_pokemon_s_il_est_vainqueur() {
+        // GIVEN
+        Mockito.when(fausseApi.recupererParNom("pikachu"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url_pikachu", new Stats(3,4))));
+        Mockito.when(fausseApi.recupererParNom("scarabrute"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("scarabrute", "url_scarabrute", new Stats(1,2))));
+
+        // WHEN
+        CompletableFuture<Pokemon> futurVainqueur = bagarre.demarrer("pikachu", "scarabrute");
+
+        // THEN
+        assertThat(futurVainqueur)
+                .succeedsWithin(Duration.ofSeconds(2))
+                .satisfies(pokemon -> {
+                            assertThat(pokemon.getNom()).isEqualTo("pikachu");
+                            assertThat(pokemon.getUrlImage()).isEqualTo("url_pikachu");
+                            assertThat(pokemon.getStats().getAttaque()).isEqualTo(3);
+                            assertThat(pokemon.getStats().getDefense()).isEqualTo(4);
+                        }
+                );
+    }
+    @Test
+    void devrait_retourner_le_second_pokemon_s_il_est_vainqueur() {
+        // GIVEN
+        Mockito.when(fausseApi.recupererParNom("pikachu"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("pikachu", "url_pikachu", new Stats(1,2))));
+        Mockito.when(fausseApi.recupererParNom("scarabrute"))
+                .thenReturn(CompletableFuture.completedFuture(new Pokemon("scarabrute", "url_scarabrute", new Stats(3,4))));
+
+        // WHEN
+        CompletableFuture<Pokemon> futurVainqueur = bagarre.demarrer("pikachu", "scarabrute");
+
+        // THEN
+        assertThat(futurVainqueur)
+                .succeedsWithin(Duration.ofSeconds(2))
+                .satisfies(pokemon -> {
+                            assertThat(pokemon.getNom()).isEqualTo("scarabrute");
+                            assertThat(pokemon.getUrlImage()).isEqualTo("url_scarabrute");
+                            assertThat(pokemon.getStats().getAttaque()).isEqualTo(3);
+                            assertThat(pokemon.getStats().getDefense()).isEqualTo(4);
+                        }
+                );
     }
 }
